@@ -21,6 +21,8 @@
 \usepackage{amsmath}
 \usepackage{algorithmic}
 \usepackage{bm}
+\usepackage{listings}
+\usepackage[font={scriptsize,it}]{caption}
 
 % ====================
 % Lengths
@@ -41,9 +43,9 @@
 
 \title{PCquery.jl: Automated Mining, Integration, and Annotation of Biological Signaling Pathways}
 
-\author{Matthew Karikomi \inst{1} \and Qing Nie \inst{2}}
+\author{Matthew Karikomi \inst{1,2,3} \and Qing Nie \inst{2,3}}
 
-\institute[shortinst]{\inst{1} Some Institute \samelineand \inst{2} Another Institute}
+\institute[shortinst]{\inst{1} Mathematical, Computational, and Systems Biology Program \samelineand \inst{2} Department of Mathematics, UC Irvine \samelineand \inst{3} NSF-Simons Center for Multiscale Cell Fate Research}
 
 % ====================
 % Footer (optional)
@@ -80,210 +82,108 @@
 	\end{tikzpicture}
 }
 
-\begin{frame}[t]
+\begin{frame}[t,fragile]
 \begin{columns}[t]
 \separatorcolumn
 
-\begin{column}{0.95\colwidth}
+\begin{column}{\colwidth}  
+  \begin{exampleblock}{BioPAX is a graph-based representation of knowledge}
+    Pathways in BioPAX \cite{demir2010biopax} are heterogeneous graphs whose edges denote both conceptual (relational) knowledge and dynamics.
+    \begin{figure}
+      \centering
+      \begin{minipage}{0.4\textwidth}
+        \footnotesize
+        \includegraphics[scale=0.45]{Image/biopax_schema.jpg}
+        \caption{BioPAX knowledge schema.  Image credit: \cite{demir2010biopax}}
+      \end{minipage}
+      \hspace{2.5cm}
+      \begin{minipage}{0.4\textwidth}
+        \footnotesize
+        \includegraphics[scale=0.35]{Image/biopax_akt.jpg}
+        \caption{Representation of a unique macromolecular state in BioPAX.  Image credit: \cite{demir2010biopax}}
+      \end{minipage}
+    \end{figure}
+  \end{exampleblock}
 
-  \begin{block}{Pathway annotation}
-
-    Some block contents, followed by a diagram, followed by a dummy paragraph.
+  \begin{block}{Pathways can be mined programmatically}
+    Curated pathway databases, such as Reactome \cite{fabregat2018reactome} and KEGG \cite{kanehisa2007kegg}, are aggregated by the PathwayCommons \cite{rodchenkov2020pathway} initiative and ported to BioPAX, allowing PCquery to mine sets of related pathways using structured queries:
+    \footnotesize
+    \begin{lstlisting}
+      psParams = Dict(
+        "q"=>"notch1",:filter=>[["notch1","nucleus"],["notch1","transcription"]],
+        "type"=>"pathway","datasource"=>"reactome")
+    \end{lstlisting}
 
     \begin{figure}
       \centering
       \footnotesize
       \begin{minipage}{0.45\textwidth}
         \includegraphics[scale=3.0]{Image/notch1membrane.pdf}
-        \caption{Notch signal}
+        \caption{Notch1 Cytosolic Pathway\newline(Reactome HSA-2122948)}
       \end{minipage}
       \hspace{2.5cm}
       \begin{minipage}{0.45\textwidth}
         \includegraphics[scale=3.0]{Image/notch1nucleus.pdf}
-        \caption{Dll ligand expression}
-        \label{fig:li_in}
+        \caption{Notch1 Nuclear Pathway\newline(Reactome HSA-2122947)}
       \end{minipage}
     \end{figure}
-
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies
-    eget libero ac ullamcorper. Integer et euismod ante. Aenean vestibulum
-    lobortis augue, ut lobortis turpis rhoncus sed. Proin feugiat nibh a
-    lacinia dignissim. Proin scelerisque, risus eget tempor fermentum, ex
-    turpis condimentum urna, quis malesuada sapien arcu eu purus.
-
   \end{block}
 
-  \begin{block}{A block containing a list}
-
-    Nam vulputate nunc felis, non condimentum lacus porta ultrices. Nullam sed
-    sagittis metus. Etiam consectetur gravida urna quis suscipit.
-
-    \begin{itemize}
-      \item \textbf{Mauris tempor} risus nulla, sed ornare
-      \item \textbf{Libero tincidunt} a duis congue vitae
-      \item \textbf{Dui ac pretium} morbi justo neque, ullamcorper
-    \end{itemize}
-
-    Eget augue porta, bibendum venenatis tortor.
-
-  \end{block}
-
-  \begin{alertblock}{Regularized Dictionary Learning}
-    $\frac{\mathrm d \textit{H1}_i}{\mathrm dt} = F(\textit{H1}_i(t))$ is a linear combination of (trans) growth and (cis) inhibition.
-    \begin{equation}\label{eq:state}
-    \begin{split}
-    F(\textit{H1}_i(t)) &= \text{the interpolant of } \textit{H1}_i(t)\\
-    \Phi(\bm{d}(t)) &= \text{Hill-type transformations over Delta protein levels} \\
-    \Psi(t) &=  \left[\Phi(\bm{d}(t)), \textit{H1}(t) \right] \\
-    F(\textit{H1}_i(t)) &\approx \Psi(t) \bm{\beta_i} \\[1em]
-    \end{split}
-    \end{equation}
-    Find the cross-validated Elastic Net estimate \cite{zou_regularization_2005} of $\beta$ for each cell.\\[1em]	
-    \centering
-    \begin{minipage}{0.7\textwidth}
-      \begin{algorithmic}
-        \STATE $Adj\gets zeros(|Cells|)$
-        \FOR {cell $i$ in Cells} 
-        \STATE $\bm{\hat{\beta_i}}_{CV} \gets \underset{\bm{\beta}}{\mathrm{argmin}} \left( \big|F(H1_i(t)) - \Psi(t)\bm{\beta} \big|^2 + \lambda_2 \big| \beta \big|^2 + \lambda_1 \big|\beta \big|_1  \right)$
-        \FOR {cell $j$ in Cells}
-        \IF {$sum[\bm{\hat{\beta_i}}_{CV}(1:j:end)] > 0$}
-        \STATE $Adj(i,j) = 1$
-        \ENDIF
-        \ENDFOR
-        \ENDFOR 
-      \end{algorithmic}
-    \end{minipage}
-    \normalsize
-  \end{alertblock}
+  \begin{exampleblock}{Enumerate nested surface-marker interactions}
+    \begin{figure}
+      \centering
+      \includegraphics[scale=1.0]{Image/ontology_enumeration_NODEID.pdf}
+      \caption{Expansion of complexes imputes complex-forming interactions and allows GO annotation of reactants to be mined from NextProt \cite{lane2012nextprot}}
+    \end{figure}
+  \end{exampleblock}
 
 \end{column}
 
 \separatorcolumn
 
-\begin{column}{1.1\colwidth}
-
-  \begin{block}{Package Workflow}
-
-    Vivamus congue volutpat elit non semper. Praesent molestie nec erat ac
-    interdum. In quis suscipit erat. \textbf{Phasellus mauris felis, molestie
-    ac pharetra quis}, tempus nec ante. Donec finibus ante vel purus mollis
-    fermentum. Sed felis mi, pharetra eget nibh a, feugiat eleifend dolor. Nam
-    mollis condimentum purus quis sodales. Nullam eu felis eu nulla eleifend
-    bibendum nec eu lorem. Vivamus felis velit, volutpat ut facilisis ac,
-    commodo in metus.
+\begin{column}{2\colwidth}
+  \begin{block}{Multi-pathway scope}
+    Model-selection tasks requiring marker IDs from multiple contexts (e.g. cytosolic, nuclear) can be executed within the context of the integrated graph, as shown below for ligand-receptor interactions in the Notch pathway, including the transcriptional targets of Jag1.
     
     \begin{figure}
       \centering
-      \includegraphics[scale=1.75]{Image/schematic.pdf}
-      \caption{Package workflow}
+      \includegraphics[scale=0.5]{Image/notch_path.pdf}
+      \caption{Integrated signaling graph for human Notch1.}
     \end{figure}
-
+    
   \end{block}
+  \begin{columns}[t] % Split up the two columns wide column again
+    \begin{column}{1.3\colwidth}
+      \begin{block}{Package Workflow}
 
-  \begin{block}{Fusce aliquam magna velit}
+        Workflow begins with keyword-based search of knowledge graphs from the PathwayCommons \cite{rodchenkov2020pathway} online database, which aggregates annotated pathways in BioPAX \cite{demir2010biopax}.  Individual pathways are integrated via common molecular identifiers.   Once this integrated graph is constructed, PCquery traverses the graph and further labels all vertices with annotations from other online databases, including gene, transcript, and GO terms from NextProt \cite{lane2012nextprot}, and inter-species gene and transcript orthologs from OrthoDB \cite{kriventseva2019orthodb}.
+        
+        \begin{figure}
+          \centering
+          \includegraphics[scale=1.5]{Image/schematic.pdf}
+          \caption{A) query BioPAX pathway repository based on organism and keyword search.  B) for each annotated pathway (blue,yellow) recursively impute complex-forming reactions (RHS blue arrow) based on existing product annotations (green) and their BioPAX-annotated constituents (purple,blue).  C) Integrate augmented pathways (blue, yellow) based  on common molecular identifiers (green).  D) Mine inter-species pathway markers based on sequence-homology between reference integrated pathway protein gene loci and the gene loci of the target species.  E) Enumerate signaling trajectories for integrated pathways.  Query gene regulatory interactions downstream of cell-surface interactions based on GO annotation of integrated pathways.}
+        \end{figure}
 
-    Et rutrum ex euismod vel. Pellentesque ultricies, velit in fermentum
-    vestibulum, lectus nisi pretium nibh, sit amet aliquam lectus augue vel
-    velit. Suspendisse rhoncus massa porttitor augue feugiat molestie. Sed
-    molestie ut orci nec malesuada. Sed ultricies feugiat est fringilla.
-
-    \begin{figure}
-      \centering
-      \begin{tikzpicture}
-        \begin{axis}[
-            scale only axis,
-            no markers,
-            domain=0:2*pi,
-            samples=100,
-            axis lines=center,
-            axis line style={-},
-            ticks=none]
-          \addplot[red] {sin(deg(x))};
-          \addplot[blue] {cos(deg(x))};
-        \end{axis}
-      \end{tikzpicture}
-      \caption{Another figure caption.}
-    \end{figure}
-
-  \end{block}
-
-\end{column}
-
-\separatorcolumn
-
-\begin{column}{0.95\colwidth}
-
-  \begin{exampleblock}{Enumerate nested surface-marker interactions}
-
-    A different kind of highlighted block.
-
-    $$
-    \int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi}
-    $$
-
-    Interdum et malesuada fames $\{1, 4, 9, \ldots\}$ ac ante ipsum primis in
-    faucibus. Cras eleifend dolor eu nulla suscipit suscipit. Sed lobortis non
-    felis id vulputate.
-
-    \heading{A heading inside a block}
-
-    Praesent consectetur mi $x^2 + y^2$ metus, nec vestibulum justo viverra
-    nec. Proin eget nulla pretium, egestas magna aliquam, mollis neque. Vivamus
-    dictum $\mathbf{u}^\intercal\mathbf{v}$ sagittis odio, vel porta erat
-    congue sed. Maecenas ut dolor quis arcu auctor porttitor.
-
-    \heading{Another heading inside a block}
-
-    Sed augue erat, scelerisque a purus ultricies, placerat porttitor neque.
-    Donec $P(y \mid x)$ fermentum consectetur $\nabla_x P(y \mid x)$ sapien
-    sagittis egestas. Duis eget leo euismod nunc viverra imperdiet nec id
-    justo.
-
-  \end{exampleblock}
-
-  \begin{block}{Nullam vel erat at velit convallis laoreet}
-
-    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
-    inceptos himenaeos. Phasellus libero enim, gravida sed erat sit amet,
-    scelerisque congue diam. Fusce dapibus dui ut augue pulvinar iaculis.
-
-    \begin{table}
-      \centering
-      \begin{tabular}{l r r c}
-        \toprule
-        \textbf{First column} & \textbf{Second column} & \textbf{Third column} & \textbf{Fourth} \\
-        \midrule
-        Foo & 13.37 & 384,394 & $\alpha$ \\
-        Bar & 2.17 & 1,392 & $\beta$ \\
-        Baz & 3.14 & 83,742 & $\delta$ \\
-        Qux & 7.59 & 974 & $\gamma$ \\
-        \bottomrule
-      \end{tabular}
-      \caption{A table caption.}
-    \end{table}
-
-    Donec quis posuere ligula. Nunc feugiat elit a mi malesuada consequat. Sed
-    imperdiet augue ac nibh aliquet tristique. Aenean eu tortor vulputate,
-    eleifend lorem in, dictum urna. Proin auctor ante in augue tincidunt
-    tempor. Proin pellentesque vulputate odio, ac gravida nulla posuere
-    efficitur. Aenean at velit vel dolor blandit molestie. Mauris laoreet
-    commodo quam, non luctus nibh ullamcorper in. Class aptent taciti sociosqu
-    ad litora torquent per conubia nostra, per inceptos himenaeos.
-
-    Nulla varius finibus volutpat. Mauris molestie lorem tincidunt, iaculis
-    libero at, gravida ante. Phasellus at felis eu neque suscipit suscipit.
-    Integer ullamcorper, dui nec pretium ornare, urna dolor consequat libero,
-    in feugiat elit lorem euismod lacus. Pellentesque sit amet dolor mollis,
-    auctor urna non, tempus sem.
-
-  \end{block}
-
-  \begin{block}{References}
-
-    \nocite{*}
-    \footnotesize{\bibliographystyle{plain}\bibliography{poster}}
-
-  \end{block}
+      \end{block}
+    \end{column}
+    \begin{column}{0.7\colwidth}
+    
+      \begin{exampleblock}{Interspecies ortholog expression}
+    
+        \begin{figure}
+          \centering
+          \includegraphics[scale=0.75]{Image/orthomap_GID.pdf}
+          \caption{Mapping the gene expression of a single zebrafish neural crest cell to human orthologs in the integrated Notch1 pathway from human}
+        \end{figure}
+    
+      \end{exampleblock}
+      \begin{block}{References}
+        \nocite{*}
+        \tiny{\bibliographystyle{plain}\bibliography{poster}}      
+      \end{block}
+  \end{column}
+\end{columns}
+  
 
 \end{column}
 

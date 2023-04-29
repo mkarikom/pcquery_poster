@@ -1,0 +1,106 @@
+\begin{columns}[t]
+\separatorcolumn
+
+\begin{column}{\colwidth}
+  \begin{exampleblock}{BioPAX is a graph-based representation of knowledge}
+    Pathways in BioPAX \cite{demir2010biopax} are heterogeneous graphs whose edges denote both conceptual (relational) knowledge and dynamics.
+    \begin{figure}
+      \centering
+      \begin{minipage}{0.4\textwidth}
+        \footnotesize
+        \includegraphics[scale=0.45]{Image/biopax_schema.jpg}
+        \caption{BioPAX knowledge schema.  Image credit: \cite{demir2010biopax}}
+      \end{minipage}
+      \hspace{2.5cm}
+      \begin{minipage}{0.4\textwidth}
+        \footnotesize
+        \includegraphics[scale=0.35]{Image/biopax_akt.jpg}
+        \caption{Representation of a unique macromolecular state in BioPAX.  Image credit: \cite{demir2010biopax}}
+      \end{minipage}
+    \end{figure}
+  \end{exampleblock}
+
+  \begin{block}{Pathways can be mined programmatically}
+    Curated pathway databases, such as Reactome \cite{fabregat2018reactome} and KEGG \cite{kanehisa2007kegg}, are aggregated by the PathwayCommons \cite{rodchenkov2020pathway} initiative and ported to BioPAX, allowing PCquery to mine sets of related pathways using structured queries:
+    \footnotesize
+    \begin{lstlisting}
+      psParams = Dict(
+        "q"=>"notch1",:filter=>[["notch1","nucleus"],["notch1","transcription"]],
+        "type"=>"pathway","datasource"=>"reactome")
+    \end{lstlisting}
+
+    \begin{figure}
+      \centering
+      \footnotesize
+      \begin{minipage}{0.45\textwidth}
+        \includegraphics[scale=3.0]{Image/notch1membrane.pdf}
+        \caption{Notch1 Cytosolic Pathway\newline(Reactome HSA-2122948)}
+      \end{minipage}
+      \hspace{2.5cm}
+      \begin{minipage}{0.45\textwidth}
+        \includegraphics[scale=3.0]{Image/notch1nucleus.pdf}
+        \caption{Notch1 Nuclear Pathway\newline(Reactome HSA-2122947)}
+      \end{minipage}
+    \end{figure}
+  \end{block}
+
+  \begin{exampleblock}{Enumerate nested surface-marker interactions}
+    \begin{figure}
+      \centering
+      \includegraphics[scale=1.0]{Image/ontology_enumeration_NODEID.pdf}
+      \caption{Expansion of complexes imputes complex-forming interactions and allows GO annotation of reactants to be mined from NextProt \cite{lane2012nextprot}}
+    \end{figure}
+  \end{exampleblock}
+
+\end{column}
+
+\separatorcolumn
+
+\begin{column}{2\colwidth}
+  \begin{block}{Multi-pathway scope}
+    Model-selection tasks requiring marker IDs from multiple contexts (e.g. cytosolic, nuclear) can be executed within the context of the integrated graph, as shown below for ligand-receptor interactions in the Notch pathway, including the transcriptional targets of Jag1.
+
+    \begin{figure}
+      \centering
+      \includegraphics[scale=0.5]{Image/notch_path.pdf}
+      \caption{Integrated signaling graph for human Notch1.}
+    \end{figure}
+
+  \end{block}
+  \begin{columns}[t] % Split up the two columns wide column again
+    \begin{column}{1.3\colwidth}
+      \begin{block}{Package Workflow}
+
+        Workflow begins with keyword-based search of knowledge graphs from the PathwayCommons \cite{rodchenkov2020pathway} online database, which aggregates annotated pathways in BioPAX \cite{demir2010biopax}.  Individual pathways are integrated via common molecular identifiers.   Once this integrated graph is constructed, PCquery traverses the graph and further labels all vertices with annotations from other online databases, including gene, transcript, and GO terms from NextProt \cite{lane2012nextprot}, and inter-species gene and transcript orthologs from OrthoDB \cite{kriventseva2019orthodb}.
+
+        \begin{figure}
+          \centering
+          \includegraphics[scale=1.5]{Image/schematic.pdf}
+          \caption{A) query BioPAX pathway repository based on organism and keyword search.  B) for each annotated pathway (blue,yellow) recursively impute complex-forming reactions (RHS blue arrow) based on existing product annotations (green) and their BioPAX-annotated constituents (purple,blue).  C) Integrate augmented pathways (blue, yellow) based  on common molecular identifiers (green).  D) Mine inter-species pathway markers based on sequence-homology between reference integrated pathway protein gene loci and the gene loci of the target species.  E) Enumerate signaling trajectories for integrated pathways.  Query gene regulatory interactions downstream of cell-surface interactions based on GO annotation of integrated pathways.}
+        \end{figure}
+
+      \end{block}
+    \end{column}
+    \begin{column}{0.7\colwidth}
+
+      \begin{exampleblock}{Interspecies ortholog expression}
+
+        \begin{figure}
+          \centering
+          \includegraphics[scale=0.75]{Image/orthomap_GID.pdf}
+          \caption{Mapping the gene expression of a single zebrafish neural crest cell to human orthologs in the integrated Notch1 pathway from human}
+        \end{figure}
+
+      \end{exampleblock}
+      \begin{block}{References}
+        \nocite{*}
+        \tiny{\bibliographystyle{plain}\bibliography{poster}}
+      \end{block}
+  \end{column}
+\end{columns}
+
+
+\end{column}
+
+\separatorcolumn
+\end{columns}

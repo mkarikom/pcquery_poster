@@ -1,5 +1,49 @@
 \begin{thebibliography}{1}
 
+\bibitem{demir2010biopax}
+Emek Demir, Michael~P Cary, Suzanne Paley, Ken Fukuda, Christian Lemer, Imre
+  Vastrik, Guanming Wu, Peter D'eustachio, Carl Schaefer, Joanne Luciano,
+  et~al.
+\newblock The biopax community standard for pathway data sharing.
+\newblock {\em Nature biotechnology}, 28(9):935--942, 2010.
+
+\bibitem{fabregat2018reactome}
+Antonio Fabregat, Steven Jupe, Lisa Matthews, Konstantinos Sidiropoulos, Marc
+  Gillespie, Phani Garapati, Robin Haw, Bijay Jassal, Florian Korninger, Bruce
+  May, et~al.
+\newblock The reactome pathway knowledgebase.
+\newblock {\em Nucleic acids research}, 46(D1):D649--D655, 2018.
+
+\bibitem{kanehisa2007kegg}
+Minoru Kanehisa, Michihiro Araki, Susumu Goto, Masahiro Hattori, Mika Hirakawa,
+  Masumi Itoh, Toshiaki Katayama, Shuichi Kawashima, Shujiro Okuda, Toshiaki
+  Tokimatsu, et~al.
+\newblock Kegg for linking genomes to life and the environment.
+\newblock {\em Nucleic acids research}, 36(suppl\_1):D480--D484, 2007.
+
+\bibitem{kriventseva2019orthodb}
+Evgenia~V Kriventseva, Dmitry Kuznetsov, Fredrik Tegenfeldt, Mos{\`e} Manni,
+  Renata Dias, Felipe~A Sim{\~a}o, and Evgeny~M Zdobnov.
+\newblock Orthodb v10: sampling the diversity of animal, plant, fungal,
+  protist, bacterial and viral genomes for evolutionary and functional
+  annotations of orthologs.
+\newblock {\em Nucleic acids research}, 47(D1):D807--D811, 2019.
+
+\bibitem{lane2012nextprot}
+Lydie Lane, Ghislaine Argoud-Puy, Aurore Britan, Isabelle Cusin, Paula~D Duek,
+  Olivier Evalet, Alain Gateau, Pascale Gaudet, Anne Gleizes, Alexandre
+  Masselot, et~al.
+\newblock nextprot: a knowledge platform for human proteins.
+\newblock {\em Nucleic acids research}, 40(D1):D76--D83, 2012.
+
+\bibitem{rodchenkov2020pathway}
+Igor Rodchenkov, Ozgun Babur, Augustin Luna, Bulent~Arman Aksoy, Jeffrey~V
+  Wong, Dylan Fong, Max Franz, Metin~Can Siper, Manfred Cheung, Michael Wrana,
+  et~al.
+\newblock Pathway commons 2019 update: integration, analysis and exploration of
+  pathway data.
+\newblock {\em Nucleic acids research}, 48(D1):D489--D497, 2020.
+
 \bibitem{shannon1948communication}
 Claude~E. Shannon.
 \newblock A mathematical theory of communication.
